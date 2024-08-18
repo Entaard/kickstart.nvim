@@ -1,7 +1,7 @@
 -- Autoformat
 return {
   'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
+  event = { 'BufWritePre', 'BufNewFile' },
   cmd = { 'ConformInfo' },
   keys = {
     {
@@ -14,7 +14,8 @@ return {
     },
   },
   opts = {
-    notify_on_error = false,
+    notify_on_error = true,
+    notify_no_formatters = true,
     format_on_save = function(bufnr)
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
@@ -39,6 +40,12 @@ return {
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      --
+      -- Use the "*" filetype to run formatters on all filetypes.
+      ['*'] = { 'codespell' },
+      -- Use the "_" filetype to run formatters on filetypes that don't
+      -- have other formatters configured.
+      ['_'] = { 'trim_whitespace' },
     },
   },
 }

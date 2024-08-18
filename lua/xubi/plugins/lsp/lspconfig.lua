@@ -16,6 +16,8 @@ return {
     'hrsh7th/cmp-nvim-lsp',
   },
   config = function()
+    -- vim.lsp.set_log_level 'debug'
+    -- vim.lsp.log.set_level(vim.log.levels.OFF)
     -- Brief aside: **What is LSP?**
     --
     -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -56,6 +58,8 @@ return {
         local map = function(keys, func, desc)
           vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
+
+        map('<leader>ro', ':LspRestart omnisharp<CR>', '[R]estart [L]language Server')
 
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.
@@ -151,16 +155,22 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+    local function get_default_solution_path()
+      local cwd = vim.fn.getcwd()
+      local is_large_solution = string.match(cwd, 'XCortex')
+      if is_large_solution then
+        return '/Users/tuananhnguyen/Projects/OL/Cortex_Core/XCortex/Cortex3.sln'
+      end
+    end
+
+    local default_solution_path = get_default_solution_path()
+    local cmd = { 'omnisharp' }
+    if default_solution_path ~= nil then
+      cmd = { 'omnisharp', string.format('-s %s', default_solution_path) }
+    end
+
     local servers = {
-      omnisharp = {
-        -- cmd = { 'dotnet', vim.fn.stdpath 'data' .. '/mason/packages/omnisharp/libexec/OmniSharp.dll' },
-        capabilities = capabilities,
-        enable_roslyn_analysers = true,
-        enable_import_completion = true,
-        organize_imports_on_format = true,
-        enable_decompilation_support = true,
-        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
-      },
       -- clangd = {},
       -- gopls = {},
       -- pyright = {},
@@ -173,6 +183,64 @@ return {
       -- But for many setups, the LSP (`tsserver`) will work just fine
       -- tsserver = {},
       --
+      -- NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
+      omnisharp = {
+        -- NOTE: Example of using self-installed omnisharp-roslyn. However this won't work with the current mason-lspconfig setup. And we may be able to install specific using Mason.
+        -- So this example is just for fun.
+        -- cmd = {
+        --   '/usr/local/bin/omnisharp-roslyn/OmniSharp', --
+        -- 'DotNet:enablePackageRestore=false',
+        -- '--hostPID',
+        -- tostring(vim.fn.getpid()),
+        -- '-z',
+        -- '--languageserver',
+        -- },
+        cmd = cmd,
+        settings = {
+          FormattingOptions = {
+            -- Enables support for reading code style, naming convention and analyzer
+            -- settings from .editorconfig.
+            EnableEditorConfigSupport = true,
+            -- Specifies whether 'using' directives should be grouped and sorted during
+            -- document formatting.
+            OrganizeImports = true,
+          },
+          MsBuild = {
+            -- If true, MSBuild project system will only load projects for files that
+            -- were opened in the editor. This setting is useful for big C# codebases
+            -- and allows for faster initialization of code navigation features only
+            -- for projects that are relevant to code that is being edited. With this
+            -- setting enabled OmniSharp may load fewer projects and may thus display
+            -- incomplete reference lists for symbols.
+            LoadProjectsOnDemand = false,
+          },
+          RoslynExtensionsOptions = {
+            -- Enables support for roslyn analyzers, code fixes and rulesets.
+            EnableAnalyzersSupport = true,
+            -- Enables support for showing unimported types and unimported extension
+            -- methods in completion lists. When committed, the appropriate using
+            -- directive will be added at the top of the current file. This option can
+            -- have a negative impact on initial completion responsiveness,
+            -- particularly for the first few completion sessions after opening a
+            -- solution.
+            EnableImportCompletion = true,
+            -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+            -- true
+            AnalyzeOpenDocumentsOnly = true,
+          },
+          Sdk = {
+            -- Specifies whether to include preview versions of the .NET SDK when
+            -- determining which version to use for project loading.
+            IncludePrereleases = false,
+          },
+        },
+        capabilities = capabilities,
+        enable_roslyn_analysers = true,
+        enable_import_completion = true,
+        organize_imports_on_format = true,
+        enable_decompilation_support = true,
+        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+      },
 
       lua_ls = {
         -- cmd = {...},
@@ -201,8 +269,12 @@ return {
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers or {})
+    -- code formatters. Currently using ~/Projects/.editorconfig
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'prettier',
+      'csharpier',
+      'codespell',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

@@ -14,6 +14,8 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Put on Visual text without losing the current register
 vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Put on Visual text without losing the current register' })
 
+vim.keymap.set('n', '<leader>w', ':update<CR>', { desc = 'Update current file' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -34,6 +36,7 @@ vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Split window vertically' }
 vim.keymap.set('n', '<leader>wh', '<C-w>s', { desc = 'Split window horizontally' }) -- split window horizontally
 vim.keymap.set('n', '<leader>we', '<C-w>=', { desc = 'Make splits equal size' }) -- make split windows equal width & height
 vim.keymap.set('n', '<leader>wx', '<cmd>close<CR>', { desc = 'Close current split' }) -- close current split window
+vim.keymap.set('n', '<leader>wj', '<C-w>j:close<CR>', { desc = 'Close split blow' })
 
 -- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 -- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
