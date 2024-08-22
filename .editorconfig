@@ -1,0 +1,23 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+# Non-configurable behaviors
+charset = utf-8
+trim_trailing_whitespace = true
+# Configurable behaviors
+end_of_line = lf
+indent_style = space
+max_line_length = 100
+insert_final_newline = false
+
+[*.{cs,vb}]
+dotnet_sort_system_directives_first = false
+dotnet_separate_import_directive_groups = false
+indent_size = 4
+tab_width = 4
+csharp_style_var_for_built_in_types = true
+csharp_style_var_when_type_is_apparent = true
+csharp_style_var_elsewhere = true
