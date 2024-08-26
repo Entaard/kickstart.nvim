@@ -17,6 +17,16 @@ return {
     notify_on_error = true,
     notify_no_formatters = true,
     format_on_save = function(bufnr)
+      -- For more examples, see https://github.com/stevearc/conform.nvim/blob/master/doc/recipes.md#autoformat-with-extra-features
+      -- Disable with a global or buffer-local variable
+      if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+        return
+      end
+      -- Disable autoformat on certain filetypes
+      local ignore_filetypes = { "cs" }
+      if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
+        return
+      end
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
@@ -34,7 +44,7 @@ return {
       json = { 'prettier' },
       yaml = { 'prettier' },
       markdown = { 'prettier' },
-      csharp = { 'csharpier' },
+      -- csharp = { 'csharpier' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
