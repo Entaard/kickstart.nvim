@@ -14,7 +14,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Put on Visual text without losing the current register
 vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Put on Visual text without losing the current register' })
 
-vim.keymap.set('n', '<leader>w', ':update<CR>', { desc = 'Update current file' })
+vim.keymap.set('n', '<leader>u', ':update<CR>', { desc = 'Update current file' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })

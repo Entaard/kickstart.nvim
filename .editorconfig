@@ -15,7 +15,7 @@ indent_style = space
 
 [*.{cs,vb}]
 dotnet_sort_system_directives_first = false
-dotnet_separate_import_directive_groups = true
+dotnet_separate_import_directive_groups = false
 indent_size = 4
 tab_width = 4
 csharp_style_namespace_declarations = file_scoped
@@ -78,3 +78,5 @@ csharp_preserve_single_line_blocks = true
 # silent formatting rules
 dotnet_diagnostic.IDE0055.severity = silent
 dotnet_analyzer_diagnostic.category-Style.severity = silent
+# silent naming rules
+dotnet_diagnostic.CA1707.severity = none
