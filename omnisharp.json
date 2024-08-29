@@ -1,10 +1,10 @@
 {
   "RoslynExtensionsOptions": {
-    "documentAnalysisTimeoutMs": 45000,
+    "documentAnalysisTimeoutMs": 15000,
     "enableDecompilationSupport": true,
     "enableImportCompletion": true,
     "enableAnalyzersSupport": true,
-    "diagnosticWorkersThreadCount": 8,
+    "diagnosticWorkersThreadCount": 2,
     "inlayHintsOptions": {
       "enableForParameters": true,
       "forLiteralParameters": true,
@@ -35,5 +35,5 @@
     "RenameInComments": false,
     "RenameOverloads": false,
     "RenameInStrings": false
-  },
+  }
 }
