@@ -1,9 +1,9 @@
 {
   "RoslynExtensionsOptions": {
-    "documentAnalysisTimeoutMs": 15000,
+    "documentAnalysisTimeoutMs": 30000,
     "enableDecompilationSupport": true,
     "enableImportCompletion": true,
-    "enableAnalyzersSupport": true,
+    "enableAnalyzersSupport": false,
     "diagnosticWorkersThreadCount": 2,
     "inlayHintsOptions": {
       "enableForParameters": true,
@@ -24,12 +24,13 @@
     "systemExcludeSearchPatterns": [
       "**/node_modules/**/*",
       "**/bin/**/*",
-      "**/obj/**/*",
-      ".artifacts/**/*",
-      "Cortex/wwwroot/**/*",
-      "Tests_GlobalNUnit/TestFiles/**/*"
+      "**/obj/**/*"
     ],
-    "excludeSearchPatterns": []
+    "excludeSearchPatterns": [
+      "Cortex/wwwroot/**/*",
+      "Tests_GlobalNUnit/TestFiles/**/*",
+      "App_*"
+    ]
   },
   "RenameOptions": {
     "RenameInComments": false,

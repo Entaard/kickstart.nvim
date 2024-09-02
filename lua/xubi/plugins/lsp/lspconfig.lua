@@ -213,7 +213,9 @@ return {
       -- But for many setups, the LSP (`tsserver`) will work just fine
       -- tsserver = {},
       --
-      -- NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
+      --NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
+      --NOTE: To improve performance, set enableAnalyzersSupport to false in omnisharp.json
+      --NOTE: Current omnisharp-roslyn issue: https://github.com/OmniSharp/omnisharp-roslyn/issues/2574. Workaround: install v1.39.8: `:MasonInstall omnisharp@v1.39.8`
       omnisharp = {
         cmd = cmd,
         settings = {
