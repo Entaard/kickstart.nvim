@@ -56,6 +56,12 @@ return {
         --
         -- In this case, we create a function that lets us more easily define mappings specific
         -- for LSP related items. It sets the mode, buffer and description for us each time.
+        --
+        -- NOTE: To avoid a random LSP server like github copilot to override keymaps of omnisharp-vim, do not configure keymap if the filetype is in { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' }
+        if vim.tbl_contains({ 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' }, vim.bo.filetype) then
+          return
+        end
+
         local map = function(keys, func, desc, mode)
           mode = mode or 'n'
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -214,22 +220,31 @@ return {
       -- But for many setups, the LSP (`tsserver`) will work just fine
       -- tsserver = {},
       --
+      --WARNING: In terms of performance and functionalities, omnisharp lsp (either installed by mason or manually using nvim lspconfig) is much worse than omnisharp-vim:
+      --1: omnisharp-vim is a bit faster when loading a large solution
+      --2. omnisharp-vim has more features like go to definition and implementation of decompiled code out of the box
+      --3. omnisharp-vim can use the latest version of omnisharp-roslyn (v1.39.12 at the moment), while omnisharp lsp only works properly with v1.39.8 (see NOTE below)
+      --4. omnisharp-vim has UI to choose a solution to load if the current directory contains multiple solutions
+      --And maybe more...
+      --
+      --TODO: May return to omnisharp lsp in the future to check if it's better
+      --
       --NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
       --NOTE: To improve performance, set enableAnalyzersSupport to false in omnisharp.json
       --NOTE: Current omnisharp-roslyn issue: https://github.com/OmniSharp/omnisharp-roslyn/issues/2574. Workaround: install v1.39.8: `:MasonInstall omnisharp@v1.39.8`
-      omnisharp = {
-        cmd = cmd,
-        settings = {
-          FormattingOptions = {
-            EnableEditorConfigSupport = true,
-          },
-          Sdk = {
-            IncludePrereleases = false,
-          },
-        },
-        capabilities = capabilities,
-        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
-      },
+      -- omnisharp = {
+      --   cmd = cmd,
+      --   settings = {
+      --     FormattingOptions = {
+      --       EnableEditorConfigSupport = true,
+      --     },
+      --     Sdk = {
+      --       IncludePrereleases = false,
+      --     },
+      --   },
+      --   capabilities = capabilities,
+      --   filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+      -- },
 
       lua_ls = {
         -- cmd = {...},

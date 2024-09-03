@@ -4,7 +4,7 @@
     "enableDecompilationSupport": true,
     "enableImportCompletion": true,
     "enableAnalyzersSupport": false,
-    "diagnosticWorkersThreadCount": 2,
+    "diagnosticWorkersThreadCount": 8,
     "inlayHintsOptions": {
       "enableForParameters": true,
       "forLiteralParameters": true,
@@ -31,6 +31,9 @@
       "Tests_GlobalNUnit/TestFiles/**/*",
       "App_*"
     ]
+  },
+  "FormattingOptions": {
+    "EnableEditorConfigSupport": true
   },
   "RenameOptions": {
     "RenameInComments": false,
