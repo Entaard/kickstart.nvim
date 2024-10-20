@@ -23,7 +23,7 @@ return {
         return
       end
       -- Disable autoformat on certain filetypes
-      local ignore_filetypes = { 'cs' }
+      local ignore_filetypes = { 'cs', 'dockerfile', 'json', 'markdown', 'yaml' }
       if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
         return
       end

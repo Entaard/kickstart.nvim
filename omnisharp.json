@@ -27,9 +27,8 @@
       "**/obj/**/*"
     ],
     "excludeSearchPatterns": [
-      "Cortex/wwwroot/**/*",
-      "Tests_GlobalNUnit/TestFiles/**/*",
-      "App_*"
+      "**/Cortex/wwwroot/**/*",
+      "**/Tests_GlobalNUnit/TestFiles/**/*"
     ]
   },
   "FormattingOptions": {

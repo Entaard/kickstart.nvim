@@ -61,7 +61,8 @@ vim.g.OmniSharp_popup_options = {
 -- auto complete
 vim.g.asyncomplete_auto_popup = 1
 vim.g.asyncomplete_auto_completeopt = 0
-vim.o.completeopt = 'menuone,noinsert,noselect,preview'
+-- vim.o.completeopt = 'menuone,noinsert,noselect,preview'
+vim.o.completeopt = 'menuone,noinsert,noselect'
 vim.cmd 'autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif' -- auto close preview pane when completion is done
 
 return {
