@@ -7,7 +7,7 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'Hoffs/omnisharp-extended-lsp.nvim',
+    -- 'Hoffs/omnisharp-extended-lsp.nvim',
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -74,32 +74,32 @@ return {
         --  To jump back, press <C-t>.
         map('gd', function()
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.name == 'omnisharp' then
-            require('omnisharp_extended').lsp_definition()
-          else
-            require('telescope.builtin').lsp_definitions()
-          end
+          -- if client and client.name == 'omnisharp' then
+          --   require('omnisharp_extended').lsp_definition()
+          -- else
+          require('telescope.builtin').lsp_definitions()
+          -- end
         end, '[G]oto [D]efinition')
 
         -- Find references for the word under your cursor.
         map('gr', function()
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.name == 'omnisharp' then
-            require('omnisharp_extended').lsp_references()
-          else
-            require('telescope.builtin').lsp_references()
-          end
+          -- if client and client.name == 'omnisharp' then
+          --   require('omnisharp_extended').lsp_references()
+          -- else
+          require('telescope.builtin').lsp_references()
+          -- end
         end, '[G]oto [R]eferences')
 
         -- Jump to the implementation of the word under your cursor.
         --  Useful when your language has ways of declaring types without an actual implementation.
         map('gI', function()
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.name == 'omnisharp' then
-            require('omnisharp_extended').lsp_implementation()
-          else
-            require('telescope.builtin').lsp_implementations()
-          end
+          -- if client and client.name == 'omnisharp' then
+          --   require('omnisharp_extended').lsp_implementation()
+          -- else
+          require('telescope.builtin').lsp_implementations()
+          -- end
         end, '[G]oto [I]mplementation')
 
         -- Jump to the type of the word under your cursor.
@@ -107,11 +107,11 @@ return {
         --  the definition of its *type*, not where it was *defined*.
         map('<leader>D', function()
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.name == 'omnisharp' then
-            require('omnisharp_extended').lsp_type_definition()
-          else
-            require('telescope.builtin').lsp_type_definitions()
-          end
+          -- if client and client.name == 'omnisharp' then
+          --   require('omnisharp_extended').lsp_type_definition()
+          -- else
+          require('telescope.builtin').lsp_type_definitions()
+          -- end
         end, 'Type [D]efinition')
 
         -- Fuzzy find all the symbols in your current document.
@@ -232,19 +232,19 @@ return {
       --NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
       --NOTE: To improve performance, set enableAnalyzersSupport to false in omnisharp.json
       --NOTE: Current omnisharp-roslyn issue: https://github.com/OmniSharp/omnisharp-roslyn/issues/2574. Workaround: install v1.39.8: `:MasonInstall omnisharp@v1.39.8`
-      -- omnisharp = {
-      --   cmd = cmd,
-      --   settings = {
-      --     FormattingOptions = {
-      --       EnableEditorConfigSupport = true,
-      --     },
-      --     Sdk = {
-      --       IncludePrereleases = false,
-      --     },
-      --   },
-      --   capabilities = capabilities,
-      --   filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
-      -- },
+      omnisharp = {
+        cmd = cmd,
+        settings = {
+          FormattingOptions = {
+            EnableEditorConfigSupport = true,
+          },
+          Sdk = {
+            IncludePrereleases = false,
+          },
+        },
+        capabilities = capabilities,
+        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
+      },
 
       lua_ls = {
         -- cmd = {...},
