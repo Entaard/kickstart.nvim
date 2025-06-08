@@ -201,8 +201,8 @@ return {
         settings = {
           ['csharp|background_analycis'] = {
             -- openFiles, fullSolution, none
-            dotnet_analyzer_diagnostics_scope = 'fullSolution',
-            dotnet_compiler_diagnostics_scope = 'fullSolution',
+            dotnet_analyzer_diagnostics_scope = 'openFiles',
+            dotnet_compiler_diagnostics_scope = 'openFiles',
           },
           -- enable with vim.lsp.inlay_hint.enable()
           ['csharp|inlay_hints'] = {
