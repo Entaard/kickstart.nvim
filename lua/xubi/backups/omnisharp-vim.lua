@@ -6,7 +6,7 @@ vim.g.OmniSharp_loglevel = 'none' -- 'debug', 'info', 'none'
 -- vim.g.OmniSharp_server_path = '/Users/tuananhnguyen/.cache/omnisharp-vim/omnisharp-roslyn/OmniSharp'
 
 vim.g.OmniSharp_server_use_mono = 0
-vim.g.OmniSharp_server_use_net6 = 1
+-- vim.g.OmniSharp_server_use_net6 = 1
 
 -- NOTE: for wsl:
 -- vim.g.OmniSharp_translate_cygwin_wsl = 1

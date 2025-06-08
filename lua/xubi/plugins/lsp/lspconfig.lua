@@ -7,7 +7,6 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    -- 'Hoffs/omnisharp-extended-lsp.nvim',
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -57,11 +56,6 @@ return {
         -- In this case, we create a function that lets us more easily define mappings specific
         -- for LSP related items. It sets the mode, buffer and description for us each time.
         --
-        -- NOTE: To avoid a random LSP server like github copilot to override keymaps of omnisharp-vim, do not configure keymap if the filetype is in { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' }
-        if vim.tbl_contains({ 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' }, vim.bo.filetype) then
-          return
-        end
-
         local map = function(keys, func, desc, mode)
           mode = mode or 'n'
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -73,45 +67,25 @@ return {
         --  This is where a variable was first declared, or where a function is defined, etc.
         --  To jump back, press <C-t>.
         map('gd', function()
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client and client.name == 'omnisharp' then
-          --   require('omnisharp_extended').lsp_definition()
-          -- else
           require('telescope.builtin').lsp_definitions()
-          -- end
         end, '[G]oto [D]efinition')
 
         -- Find references for the word under your cursor.
         map('gr', function()
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client and client.name == 'omnisharp' then
-          --   require('omnisharp_extended').lsp_references()
-          -- else
           require('telescope.builtin').lsp_references()
-          -- end
         end, '[G]oto [R]eferences')
 
         -- Jump to the implementation of the word under your cursor.
         --  Useful when your language has ways of declaring types without an actual implementation.
         map('gI', function()
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client and client.name == 'omnisharp' then
-          --   require('omnisharp_extended').lsp_implementation()
-          -- else
           require('telescope.builtin').lsp_implementations()
-          -- end
         end, '[G]oto [I]mplementation')
 
         -- Jump to the type of the word under your cursor.
         --  Useful when you're not sure what type a variable is and you want to see
         --  the definition of its *type*, not where it was *defined*.
         map('<leader>D', function()
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client and client.name == 'omnisharp' then
-          --   require('omnisharp_extended').lsp_type_definition()
-          -- else
           require('telescope.builtin').lsp_type_definitions()
-          -- end
         end, 'Type [D]efinition')
 
         -- Fuzzy find all the symbols in your current document.
@@ -192,21 +166,6 @@ return {
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 
-    local function get_default_solution_path()
-      local cwd = vim.fn.getcwd()
-      local is_large_solution = string.match(cwd, 'XCortex')
-      if is_large_solution then
-        return '/Users/tuananhnguyen/Projects/OL/Cortex_Core/XCortex/Cortex3.sln'
-      end
-    end
-
-    local default_solution_path = get_default_solution_path()
-    -- local log_level = '--loglevel Debug'
-    local cmd = { 'omnisharp', '--loglevel', 'error' }
-    if default_solution_path ~= nil then
-      cmd = { 'omnisharp', '--loglevel', 'error', string.format('-s %s', default_solution_path) }
-    end
-
     local servers = {
       -- clangd = {},
       -- gopls = {},
@@ -219,32 +178,6 @@ return {
       --
       -- But for many setups, the LSP (`tsserver`) will work just fine
       -- tsserver = {},
-      --
-      --WARNING: In terms of performance and functionalities, omnisharp lsp (either installed by mason or manually using nvim lspconfig) is much worse than omnisharp-vim:
-      --1: omnisharp-vim is a bit faster when loading a large solution
-      --2. omnisharp-vim has more features like go to definition and implementation of decompiled code out of the box
-      --3. omnisharp-vim can use the latest version of omnisharp-roslyn (v1.39.12 at the moment), while omnisharp lsp only works properly with v1.39.8 (see NOTE below)
-      --4. omnisharp-vim has UI to choose a solution to load if the current directory contains multiple solutions
-      --And maybe more...
-      --
-      --TODO: May return to omnisharp lsp in the future to check if it's better
-      --
-      --NOTE: OmniSharp is reading configuration from ~/.omnisharp/omnisharp.json
-      --NOTE: To improve performance, set enableAnalyzersSupport to false in omnisharp.json
-      --NOTE: Current omnisharp-roslyn issue: https://github.com/OmniSharp/omnisharp-roslyn/issues/2574. Workaround: install v1.39.8: `:MasonInstall omnisharp@v1.39.8`
-      omnisharp = {
-        cmd = cmd,
-        settings = {
-          FormattingOptions = {
-            EnableEditorConfigSupport = true,
-          },
-          Sdk = {
-            IncludePrereleases = false,
-          },
-        },
-        capabilities = capabilities,
-        filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets' },
-      },
 
       lua_ls = {
         -- cmd = {...},
@@ -263,6 +196,45 @@ return {
 
       dockerls = {},
       docker_compose_language_service = {},
+      roslyn = {
+        filetypes = { 'cs', 'csproj', 'sln' },
+        settings = {
+          ['csharp|background_analycis'] = {
+            -- openFiles, fullSolution, none
+            dotnet_analyzer_diagnostics_scope = 'openFiles',
+            dotnet_compiler_diagnostics_scope = 'fullSolution',
+          },
+          -- enable with vim.lsp.inlay_hint.enable()
+          ['csharp|inlay_hints'] = {
+            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+            csharp_enable_inlay_hints_for_types = true,
+            dotnet_enable_inlay_hints_for_indexer_parameters = true,
+            dotnet_enable_inlay_hints_for_literal_parameters = true,
+            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+            dotnet_enable_inlay_hints_for_other_parameters = true,
+            dotnet_enable_inlay_hints_for_parameters = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
+          },
+          ['csharp|code_lens'] = {
+            dotnet_enable_references_code_lens = true,
+          },
+          ['csharp|completion'] = {
+            dotnet_provide_regex_completions = false,
+            dotnet_show_completion_items_from_unimported_namespaces = true,
+            dotnet_show_name_completion_suggestions = true,
+          },
+          ['csharp|symbol_search'] = {
+            dotnet_search_reference_assemblies = true,
+          },
+          ['csharp|formatting'] = {
+            dotnet_organize_imports_on_format = true,
+          },
+        },
+      },
     }
 
     -- Ensure the servers and tools above are installed
@@ -271,7 +243,12 @@ return {
     --    :Mason
     --
     --  You can press `g?` for help in this menu.
-    require('mason').setup()
+    require('mason').setup {
+      registries = {
+        'github:mason-org/mason-registry',
+        'github:Crashdummyy/mason-registry',
+      },
+    }
 
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
@@ -293,6 +270,7 @@ return {
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for tsserver)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+
           require('lspconfig')[server_name].setup(server)
         end,
       },
