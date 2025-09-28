@@ -235,6 +235,7 @@ return {
           },
         },
       },
+      gopls = {},
     }
 
     -- Ensure the servers and tools above are installed
