@@ -80,3 +80,7 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+
+-- Enable autoread: automatically re-read a file if it has been changed on disk
+-- and the buffer has not been modified in Neovim.
+vim.opt.autoread = true
