@@ -10,7 +10,11 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({ { import = 'xubi.plugins' }, { import = 'xubi.plugins.lsp' } }, {
+require('lazy').setup {
+  spec = {
+    { import = 'xubi.plugins' },
+    { import = 'xubi.plugins.lsp' },
+  },
   checker = {
     enabled = true,
     notify = false,
@@ -37,4 +41,4 @@ require('lazy').setup({ { import = 'xubi.plugins' }, { import = 'xubi.plugins.ls
       lazy = '💤 ',
     },
   },
-})
+}
