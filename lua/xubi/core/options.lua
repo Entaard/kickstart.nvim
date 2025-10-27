@@ -23,8 +23,30 @@ vim.opt.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
+-- vim.schedule(function()
+--   vim.opt.clipboard = 'unnamedplus'
+-- end)
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  local ok = pcall(require, 'vim.ui.clipboard.osc52')
+  if ok then
+    local osc52 = require 'vim.ui.clipboard.osc52'
+    vim.g.clipboard = {
+      name = 'osc52',
+      copy = {
+        ['+'] = osc52.copy '+',
+        ['*'] = osc52.copy '*',
+      },
+      paste = {
+        ['+'] = osc52.paste '+',
+        ['*'] = osc52.paste '*',
+      },
+    }
+    -- If you want every yank to hit Windows clipboard by default:
+    -- vim.opt.clipboard = 'unnamedplus'
+  else
+    -- Fallback: no osc52 in this Neovim -> do nothing here
+    -- (see Section 4 for plugin fallback)
+  end
 end)
 
 -- tabs & indentation

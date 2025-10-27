@@ -14,6 +14,8 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear highlights' 
 -- Put on Visual text without losing the current register
 vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Put on Visual text without losing the current register' })
 
+vim.keymap.set('x', '<leader>y', '"+y', { desc = 'Yank on Visual text and also pass the value to clipboard' })
+
 vim.keymap.set('n', '<leader>u', ':update<CR>', { desc = 'Update current file' })
 
 -- Diagnostic keymaps
