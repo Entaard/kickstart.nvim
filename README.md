@@ -21,20 +21,44 @@ If you are experiencing issues, please make sure you have the latest versions.
 
 ### Install External Dependencies
 
-External Requirements:
-- Basic utils: `git`, `make`, `unzip`, C Compiler (`gcc`)
-- [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
-- Clipboard tool (xclip/xsel/win32yank or other depending on platform)
-- A [Nerd Font](https://www.nerdfonts.com/): optional, provides various icons
-  - if you have it set `vim.g.have_nerd_font` in `init.lua` to true
-- Language Setup:
-  - If want to write Typescript, you need `npm`
-  - If want to write Golang, you will need `go`
-  - etc.
+To run this configuration correctly across WSL, Linux (including Docker containers), and macOS, you need several system-level runtimes and tools. Mason will install and lock your language servers, formatters, and linters, but it relies on these system packages to run them.
 
-> **NOTE**
-> See [Install Recipes](#Install-Recipes) for additional Windows and Linux specific notes
-> and quick install snippets
+#### 1. Quick One-Line Installers
+
+Choose the command matching your operating system to install all required dependencies (including Git, compilers, Node.js, Go, Python, .NET SDK, Ripgrep, and Zip utils):
+
+*   **macOS (using [Homebrew](https://brew.sh/)):**
+    ```sh
+    brew install neovim git make unzip ripgrep fd node go python3 dotnet-sdk
+    ```
+*   **Ubuntu / Debian / WSL (using `apt`):**
+    ```sh
+    # 1. Update and install standard packages
+    sudo apt update
+    sudo apt install -y git make unzip gcc ripgrep fd-find nodejs npm golang-go python3 python3-venv python3-pip curl
+
+    # 2. Install .NET SDK (Required for C# support)
+    sudo apt install -y dotnet-sdk-8.0
+    ```
+*   **Arch Linux (using `pacman`):**
+    ```sh
+    sudo pacman -S --noconfirm --needed neovim git make unzip gcc ripgrep fd nodejs npm go python python-pip dotnet-sdk
+    ```
+
+---
+
+#### 2. Detailed Dependency Breakdown
+
+If you prefer to install things individually, here is the list of requirements:
+
+*   **Build Tools & Search Utilities:** `git`, `make`, `unzip`, `curl`, C Compiler (`gcc` or `clang`), `ripgrep` (required for Telescope fuzzy finding), `fd` (strongly recommended).
+*   **Node.js & npm:** Required for JS/TS formatters (Prettier) and web-related LSPs (HTML, CSS, Docker).
+*   **Go SDK:** Required for Go formatting (`gofmt`) and LSP (`gopls`).
+*   **Python 3 & venv:** Required for Python-based formatters and linters (like `codespell` and `gdtoolkit` for Godot).
+*   **.NET SDK (dotnet):** Required for C# LSP (`roslyn`) and C# formatting (`csharpier`).
+*   **Clipboard Tool:** `xclip` / `xsel` (for Linux/X11), `wl-clipboard` (for Wayland), or `win32yank` (for WSL).
+*   **Nerd Font:** Recommended for file explorer/statusline icons.
+
 
 ### Install Kickstart
 

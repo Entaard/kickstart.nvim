@@ -5,12 +5,12 @@ return {
   cmd = { 'ConformInfo' },
   keys = {
     {
-      '<leader>f',
+      '=',
       function()
         require('conform').format { async = true, lsp_format = 'fallback' }
       end,
-      mode = '',
-      desc = '[F]ormat buffer',
+      mode = 'v',
+      desc = 'Format selected block',
     },
   },
   opts = {
@@ -23,7 +23,7 @@ return {
         return
       end
       -- Disable autoformat on certain filetypes
-      local ignore_filetypes = { 'cs', 'dockerfile', 'json', 'markdown', 'yaml' }
+      local ignore_filetypes = { 'cs', 'dockerfile', 'markdown' }
       if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
         return
       end
@@ -52,6 +52,7 @@ return {
       markdown = { 'prettier' },
       csharp = { 'csharpier' },
       go = { 'gofmt' },
+      gdscript = { 'gdformat' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --

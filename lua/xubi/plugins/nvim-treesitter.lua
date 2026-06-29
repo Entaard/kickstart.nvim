@@ -22,6 +22,10 @@ return {
       'vim',
       'vimdoc',
       'c_sharp',
+      'json',
+      'yaml',
+      'toml',
+      'gdscript',
     },
     -- Autoinstall languages that are not installed
     auto_install = true,

@@ -12,7 +12,7 @@ return {
     enabled = true, -- if you want to enable the plugin
     message_template = '<author>, <date> • <summary>', -- template for the blame message, check the Message template section for more options
     date_format = '%d-%m-%Y %H:%M:%S', -- template for the date, check Date format section for more options
-    virtual_text_column = 165, -- virtual text start column, check Start virtual text at column section for more options
+    virtual_text_column = 120, -- virtual text start column, check Start virtual text at column section for more options
     message_when_not_committed = '',
     clipboard_register = '+',
 

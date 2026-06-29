@@ -1,5 +1,9 @@
 vim.g.have_nerd_font = true
 
+-- Disable netrw (recommended for nvim-tree)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: For more options, you can see `:help option-list`
@@ -23,31 +27,32 @@ vim.opt.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
--- vim.schedule(function()
---   vim.opt.clipboard = 'unnamedplus'
--- end)
 vim.schedule(function()
-  local ok = pcall(require, 'vim.ui.clipboard.osc52')
-  if ok then
-    local osc52 = require 'vim.ui.clipboard.osc52'
-    vim.g.clipboard = {
-      name = 'osc52',
-      copy = {
-        ['+'] = osc52.copy '+',
-        ['*'] = osc52.copy '*',
-      },
-      paste = {
-        ['+'] = osc52.paste '+',
-        ['*'] = osc52.paste '*',
-      },
-    }
-    -- If you want every yank to hit Windows clipboard by default:
-    -- vim.opt.clipboard = 'unnamedplus'
-  else
-    -- Fallback: no osc52 in this Neovim -> do nothing here
-    -- (see Section 4 for plugin fallback)
-  end
+  vim.opt.clipboard = 'unnamedplus'
 end)
+-- for Windows
+-- vim.schedule(function()
+--   local ok = pcall(require, 'vim.ui.clipboard.osc52')
+--   if ok then
+--     local osc52 = require 'vim.ui.clipboard.osc52'
+--     vim.g.clipboard = {
+--       name = 'osc52',
+--       copy = {
+--         ['+'] = osc52.copy '+',
+--         ['*'] = osc52.copy '*',
+--       },
+--       paste = {
+--         ['+'] = osc52.paste '+',
+--         ['*'] = osc52.paste '*',
+--       },
+--     }
+--     -- If you want every yank to hit Windows clipboard by default:
+--     -- vim.opt.clipboard = 'unnamedplus'
+--   else
+--     -- Fallback: no osc52 in this Neovim -> do nothing here
+--     -- (see Section 4 for plugin fallback)
+--   end
+-- end)
 
 -- tabs & indentation
 vim.opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
@@ -106,3 +111,6 @@ vim.opt.scrolloff = 10
 -- Enable autoread: automatically re-read a file if it has been changed on disk
 -- and the buffer has not been modified in Neovim.
 vim.opt.autoread = true
+
+-- vim-tmux-navigator: preserve zoom while navigating. https://github.com/christoomey/vim-tmux-navigator
+vim.g.tmux_navigator_preserve_zoom = 1

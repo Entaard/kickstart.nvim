@@ -21,9 +21,6 @@ return {
         --    https://github.com/rafamadriz/friendly-snippets
         {
           'rafamadriz/friendly-snippets',
-          config = function()
-            require('luasnip.loaders.from_vscode').lazy_load()
-          end,
         },
       },
     },
@@ -44,6 +41,7 @@ return {
     local lspkind = require 'lspkind'
 
     luasnip.config.setup {}
+    require('luasnip.loaders.from_vscode').lazy_load()
 
     vim.keymap.set({ 'i' }, '<C-K>', function()
       luasnip.expand()

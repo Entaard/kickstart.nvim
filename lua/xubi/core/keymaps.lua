@@ -38,12 +38,17 @@ vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Split window vertically' }
 vim.keymap.set('n', '<leader>wh', '<C-w>s', { desc = 'Split window horizontally' }) -- split window horizontally
 vim.keymap.set('n', '<leader>we', '<C-w>=', { desc = 'Make splits equal size' }) -- make split windows equal width & height
 vim.keymap.set('n', '<leader>wx', '<cmd>close<CR>', { desc = 'Close current split' }) -- close current split window
-vim.keymap.set('n', '<leader>wj', '<C-w>j:close<CR>', { desc = 'Close split blow' })
+vim.keymap.set('n', '<leader>wj', '<C-w>j:close<CR>', { desc = 'Close split below' })
 
 -- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 -- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 -- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 -- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.keymap.set('n', '<C-Up>', '<cmd>resize +2<CR>', { desc = 'Increase bottom pane height' })
+vim.keymap.set('n', '<C-Down>', '<cmd>resize -2<CR>', { desc = 'Increase top pane height' })
+vim.keymap.set('n', '<C-Left>', '<cmd>vertical resize +2<CR>', { desc = 'Increase left pane width' })
+vim.keymap.set('n', '<C-Right>', '<cmd>vertical resize -2<CR>', { desc = 'Increase right pane width' })
 
 vim.keymap.set('n', '<leader>to', '<cmd>tabnew<CR>', { desc = 'Open new tab' }) -- open new tab
 vim.keymap.set('n', '<leader>o', '<cmd>tabnew<CR>', { desc = 'Open new tab' }) -- open new tab
@@ -51,6 +56,6 @@ vim.keymap.set('n', '<leader>tx', '<cmd>tabclose<CR>', { desc = 'Close current t
 vim.keymap.set('n', '<leader>x', '<cmd>tabclose<CR>', { desc = 'Close current tab' }) -- close current tab
 vim.keymap.set('n', '<leader>tn', '<cmd>tabn<CR>', { desc = 'Go to next tab' }) --  go to next tab
 vim.keymap.set('n', '<leader>tp', '<cmd>tabp<CR>', { desc = 'Go to previous tab' }) --  go to previous tab
-vim.keymap.set('n', '<leader>n', '<cmd>tabn<CR>', { desc = 'Go to next tab' }) --  go to next tab
-vim.keymap.set('n', '<leader>p', '<cmd>tabp<CR>', { desc = 'Go to previous tab' }) --  go to previous tab
+vim.keymap.set('n', '<leader>;', '<cmd>tabn<CR>', { desc = 'Go to next tab' }) --  go to next tab
+vim.keymap.set('n', '<leader>a', '<cmd>tabp<CR>', { desc = 'Go to previous tab' }) --  go to previous tab
 vim.keymap.set('n', '<leader>tf', '<cmd>tabnew %<CR>', { desc = 'Open current buffer in new tab' }) --  move current buffer to new tab

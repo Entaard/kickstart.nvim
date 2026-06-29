@@ -1,3 +1,21 @@
+-- tabs & indentation
+vim.opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
+vim.opt.shiftwidth = 4 -- 4 spaces for indent width
+vim.opt.expandtab = true -- expand tab to spaces
+vim.opt.autoindent = true -- copy indent from current line when starting new one
+
+-- Enable break indent
+vim.opt.breakindent = true
+
+vim.opt.wrap = false
+
+-- Save undo history
+vim.opt.undofile = true
+
+-- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
 if vim.g.vscode then
   vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
@@ -20,6 +38,10 @@ if vim.g.vscode then
 
   -- paste from system clipboard
   map({ 'n', 'v' }, '<leader>p', '"+p', opts)
+
+  vim.schedule(function()
+    vim.opt.clipboard = 'unnamedplus'
+  end)
 
   -- better indent handling
   map('v', '<', '<gv', opts)
@@ -59,10 +81,10 @@ if vim.g.vscode then
   map({ 'n', 'x' }, '<leader>o', function()
     code.action 'workbench.action.files.newUntitledFile'
   end, opts)
-  map({ 'n' }, '<leader>p', function()
+  map({ 'n' }, '<leader>a', function()
     code.action 'workbench.action.previousEditor'
   end, opts)
-  map({ 'n' }, '<leader>n', function()
+  map({ 'n' }, '<leader>;', function()
     code.action 'workbench.action.nextEditor'
   end, opts)
   map({ 'n', 'x' }, 'gI', function()
@@ -71,10 +93,10 @@ if vim.g.vscode then
   map({ 'n', 'x' }, 'gd', function()
     code.action 'editor.action.revealDefinition'
   end)
-  map({ 'n', 'x' }, 'gr', function()
+  map({ 'n', 'x' }, 'gR', function()
     code.action 'references-view.findReferences'
   end)
-  map({ 'n', 'x' }, 'gR', function()
+  map({ 'n', 'x' }, 'gr', function()
     code.action 'editor.action.goToReferences'
   end)
   map({ 'n', 'x' }, '<leader>gr', function()
@@ -120,8 +142,14 @@ if vim.g.vscode then
   map({ 'n', 'x' }, '<leader>ca', function()
     code.action 'editor.action.quickFix'
   end)
-  map({ 'x' }, '<leader>f', function()
-    code.action 'editor.action.formatSelection'
+  -- map({ 'x' }, '<leader>f', function()
+  --   code.action 'editor.action.formatSelection'
+  -- end)
+  map({ 'n', 'x' }, 'zc', function()
+    code.action 'editor.fold'
+  end)
+  map({ 'n', 'x' }, 'zo', function()
+    code.action 'editor.unfold'
   end)
 else
   -- ordinary Neovim

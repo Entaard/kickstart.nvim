@@ -4,14 +4,11 @@ return {
   config = function()
     local nvimtree = require 'nvim-tree'
 
-    -- recommended settings from nvim-tree documentation
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-
     nvimtree.setup {
       view = {
-        width = 35,
+        width = 75,
         relativenumber = true,
+        side = 'right',
       },
       -- change folder arrow icons
       renderer = {
@@ -32,16 +29,18 @@ return {
       -- window splits
       actions = {
         open_file = {
+          quit_on_open = true,
           window_picker = {
             enable = false,
           },
         },
       },
       filters = {
+        dotfiles = true,
         custom = { '.DS_Store' },
       },
       git = {
-        ignore = false,
+        ignore = true,
       },
     }
 
