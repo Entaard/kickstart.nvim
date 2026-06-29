@@ -1,15 +1,14 @@
 -- Highlight, edit, and navigate code
 return {
   'nvim-treesitter/nvim-treesitter',
-  event = { 'BufReadPre', 'BufNewFile' },
+  branch = 'main',
   build = ':TSUpdate',
-  main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-  -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-  dependencies = {
-    'windwp/nvim-ts-autotag',
-  },
-  opts = {
-    ensure_installed = {
+  config = function()
+    local ts = require('nvim-treesitter')
+    ts.setup()
+
+    -- 1. Explicitly install the desired parsers
+    local parsers = {
       'bash',
       'c',
       'diff',
@@ -26,34 +25,53 @@ return {
       'yaml',
       'toml',
       'gdscript',
-    },
-    -- Autoinstall languages that are not installed
-    auto_install = true,
-    highlight = {
-      enable = true,
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-      additional_vim_regex_highlighting = { 'ruby' },
-    },
-    autotag = {
-      enable = true,
-    },
-    indent = { enable = true, disable = { 'ruby' } },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<C-space>',
-        node_incremental = '<C-space>',
-        scope_incremental = false,
-        node_decremental = '<bs>',
+    }
+    ts.install(parsers)
+
+    -- 2. Enable features via Autocommands
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'query',
+        'vim',
+        'vimdoc',
+        'cs', -- C# filetype in vim
+        'json',
+        'yaml',
+        'toml',
+        'gdscript',
       },
-    },
-  },
-  -- There are additional nvim-treesitter modules that you can use to interact
-  -- with nvim-treesitter. You should go explore a few and see what interests you:
-  --
-  --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-  --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-  --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+      callback = function(args)
+        -- Enable native syntax highlighting
+        pcall(vim.treesitter.start, args.buf)
+
+        -- Enable treesitter-based indentation
+        pcall(function()
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end)
+      end,
+    })
+
+    -- 3. Configure native incremental selection keymaps (Neovim 0.12+)
+    pcall(function()
+      vim.keymap.set('n', '<C-space>', function()
+        vim.cmd('normal! v')
+        require('vim.treesitter._select').select_parent(1)
+      end, { desc = 'Init treesitter selection' })
+
+      vim.keymap.set('x', '<C-space>', function()
+        require('vim.treesitter._select').select_parent(vim.v.count1)
+      end, { desc = 'Expand treesitter selection' })
+
+      vim.keymap.set('x', '<bs>', function()
+        require('vim.treesitter._select').select_child(vim.v.count1)
+      end, { desc = 'Shrink treesitter selection' })
+    end)
+  end,
 }

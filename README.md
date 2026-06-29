@@ -29,20 +29,20 @@ Choose the command matching your operating system to install all required depend
 
 *   **macOS (using [Homebrew](https://brew.sh/)):**
     ```sh
-    brew install neovim git make unzip ripgrep fd node go python3 dotnet-sdk
+    brew install neovim git make unzip ripgrep fd node go python3 dotnet-sdk tree-sitter-cli
     ```
 *   **Ubuntu / Debian / WSL (using `apt`):**
     ```sh
     # 1. Update and install standard packages
     sudo apt update
-    sudo apt install -y git make unzip gcc ripgrep fd-find nodejs npm golang-go python3 python3-venv python3-pip curl
+    sudo apt install -y git make unzip gcc ripgrep fd-find nodejs npm golang-go python3 python3-venv python3-pip curl tree-sitter-cli
 
     # 2. Install .NET SDK (Required for C# support)
     sudo apt install -y dotnet-sdk-8.0
     ```
 *   **Arch Linux (using `pacman`):**
     ```sh
-    sudo pacman -S --noconfirm --needed neovim git make unzip gcc ripgrep fd nodejs npm go python python-pip dotnet-sdk
+    sudo pacman -S --noconfirm --needed neovim git make unzip gcc ripgrep fd nodejs npm go python python-pip dotnet-sdk tree-sitter tree-sitter-cli
     ```
 
 ---
@@ -51,7 +51,7 @@ Choose the command matching your operating system to install all required depend
 
 If you prefer to install things individually, here is the list of requirements:
 
-*   **Build Tools & Search Utilities:** `git`, `make`, `unzip`, `curl`, C Compiler (`gcc` or `clang`), `ripgrep` (required for Telescope fuzzy finding), `fd` (strongly recommended).
+*   **Build Tools & Search Utilities:** `git`, `make`, `unzip`, `curl`, C Compiler (`gcc` or `clang`), `ripgrep` (required for Telescope fuzzy finding), `fd` (strongly recommended), `tree-sitter-cli` (required for compiling parsers locally).
 *   **Node.js & npm:** Required for JS/TS formatters (Prettier) and web-related LSPs (HTML, CSS, Docker).
 *   **Go SDK:** Required for Go formatting (`gofmt`) and LSP (`gopls`).
 *   **Python 3 & venv:** Required for Python-based formatters and linters (like `codespell` and `gdtoolkit` for Godot).
