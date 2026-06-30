@@ -19,6 +19,15 @@ Kickstart.nvim targets *only* the latest
 ['nightly'](https://github.com/neovim/neovim/releases/tag/nightly) of Neovim.
 If you are experiencing issues, please make sure you have the latest versions.
 
+Xubi - Current nvim version:
+
+```
+nvim --version
+NVIM v0.12.3
+Build type: Release
+LuaJIT 2.1.1781602682
+```
+
 ### Install External Dependencies
 
 To run this configuration correctly across WSL, Linux (including Docker containers), and macOS, you need several system-level runtimes and tools. Mason will install and lock your language servers, formatters, and linters, but it relies on these system packages to run them.
