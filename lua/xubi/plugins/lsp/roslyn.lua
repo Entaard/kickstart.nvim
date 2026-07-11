@@ -45,4 +45,20 @@ return {
     -- NOTE: You can use `:Roslyn target` to change the target
     lock_target = true,
   },
+  init = function()
+    vim.lsp.config('roslyn', {
+      cmd = {
+        'dotnet',
+        vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages', 'roslyn', 'libexec', 'Microsoft.CodeAnalysis.LanguageServer.dll'),
+        '--logLevel',
+        'Information',
+        '--extensionLogDirectory',
+        vim.fn.stdpath 'state',
+        '--stdio',
+      },
+    })
+  end,
+  config = function(_, opts)
+    require('roslyn').setup(opts)
+  end,
 }
