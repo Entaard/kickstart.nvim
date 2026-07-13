@@ -59,3 +59,7 @@ vim.keymap.set('n', '<leader>tp', '<cmd>tabp<CR>', { desc = 'Go to previous tab'
 vim.keymap.set('n', '<leader>;', '<cmd>tabn<CR>', { desc = 'Go to next tab' }) --  go to next tab
 vim.keymap.set('n', '<leader>a', '<cmd>tabp<CR>', { desc = 'Go to previous tab' }) --  go to previous tab
 vim.keymap.set('n', '<leader>tf', '<cmd>tabnew %<CR>', { desc = 'Open current buffer in new tab' }) --  move current buffer to new tab
+vim.keymap.set('n', '<leader>tw', function()
+  vim.wo.wrap = not vim.wo.wrap
+  print('Word wrap: ' .. (vim.wo.wrap and 'ON' or 'OFF'))
+end, { desc = 'Toggle word wrap' })
