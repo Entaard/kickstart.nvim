@@ -29,30 +29,42 @@ vim.opt.showmode = false
 --  See `:help 'clipboard'`
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
+
+  -- When no native OS clipboard provider is available (e.g. a headless WSL
+  -- container: no display server, no win32yank/clip.exe/pbcopy), fall back to
+  -- OSC52 so yanks reach the host terminal's clipboard over escape sequences.
+  -- On macOS / X11 / Wayland / Windows, Neovim's native provider is used.
+  local has_native = vim.fn.has 'mac' == 1
+    or vim.env.WAYLAND_DISPLAY ~= nil
+    or vim.env.DISPLAY ~= nil
+    or vim.fn.executable 'win32yank.exe' == 1
+    or vim.fn.executable 'clip.exe' == 1
+    or vim.fn.executable 'pbcopy' == 1
+    or vim.fn.executable 'wl-copy' == 1
+
+  if not has_native then
+    local ok, osc52 = pcall(require, 'vim.ui.clipboard.osc52')
+    if ok then
+      -- Paste reads the local register instead of round-tripping to the
+      -- terminal (many terminals, e.g. Windows Terminal, don't answer OSC52
+      -- paste queries and would hang). `p` still works within Neovim.
+      local function paste()
+        return vim.split(vim.fn.getreg '"', '\n')
+      end
+      vim.g.clipboard = {
+        name = 'osc52',
+        copy = {
+          ['+'] = osc52.copy '+',
+          ['*'] = osc52.copy '*',
+        },
+        paste = {
+          ['+'] = paste,
+          ['*'] = paste,
+        },
+      }
+    end
+  end
 end)
--- for Windows
--- vim.schedule(function()
---   local ok = pcall(require, 'vim.ui.clipboard.osc52')
---   if ok then
---     local osc52 = require 'vim.ui.clipboard.osc52'
---     vim.g.clipboard = {
---       name = 'osc52',
---       copy = {
---         ['+'] = osc52.copy '+',
---         ['*'] = osc52.copy '*',
---       },
---       paste = {
---         ['+'] = osc52.paste '+',
---         ['*'] = osc52.paste '*',
---       },
---     }
---     -- If you want every yank to hit Windows clipboard by default:
---     -- vim.opt.clipboard = 'unnamedplus'
---   else
---     -- Fallback: no osc52 in this Neovim -> do nothing here
---     -- (see Section 4 for plugin fallback)
---   end
--- end)
 
 -- tabs & indentation
 vim.opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
