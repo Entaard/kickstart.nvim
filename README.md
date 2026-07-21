@@ -38,7 +38,7 @@ Choose the command matching your operating system to install all required depend
 
 *   **macOS (using [Homebrew](https://brew.sh/)):**
     ```sh
-    brew install neovim git make unzip ripgrep fd node go python3 dotnet-sdk tree-sitter-cli
+    brew install neovim git make unzip ripgrep fd node go python3 dotnet-sdk tree-sitter-cli lazygit
     ```
 *   **Ubuntu / Debian / WSL (using `apt`):**
     ```sh
@@ -48,10 +48,16 @@ Choose the command matching your operating system to install all required depend
 
     # 2. Install .NET SDK (Required for C# support)
     sudo apt install -y dotnet-sdk-8.0
+
+    # 3. Install lazygit (git UI, opened with <leader>lg). Not in apt, so grab
+    #    the latest release binary:
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": *"v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit && sudo install lazygit -D -t /usr/local/bin/ && rm lazygit lazygit.tar.gz
     ```
 *   **Arch Linux (using `pacman`):**
     ```sh
-    sudo pacman -S --noconfirm --needed neovim git make unzip gcc ripgrep fd nodejs npm go python python-pip dotnet-sdk tree-sitter tree-sitter-cli
+    sudo pacman -S --noconfirm --needed neovim git make unzip gcc ripgrep fd nodejs npm go python python-pip dotnet-sdk tree-sitter tree-sitter-cli lazygit
     ```
 
 ---
@@ -65,8 +71,25 @@ If you prefer to install things individually, here is the list of requirements:
 *   **Go SDK:** Required for Go formatting (`gofmt`) and LSP (`gopls`).
 *   **Python 3 & venv:** Required for Python-based formatters and linters (like `codespell` and `gdtoolkit` for Godot).
 *   **.NET SDK (dotnet):** Required for C# LSP (`roslyn`) and C# formatting (`csharpier`).
+*   **[lazygit](https://github.com/jesseduffield/lazygit):** Terminal git UI, opened inside nvim with `<leader>lg`. See [Lazygit integration](#lazygit-integration) below.
 *   **Clipboard Tool:** `xclip` / `xsel` (for Linux/X11), `wl-clipboard` (for Wayland), or `win32yank` (for WSL).
 *   **Nerd Font:** Recommended for file explorer/statusline icons.
+
+#### Lazygit integration
+
+`<leader>lg` opens [lazygit](https://github.com/jesseduffield/lazygit) in a floating, *toggleable* terminal (via `toggleterm.nvim`):
+
+*   `<leader>lg` — open, or re-show a hidden lazygit at the exact same spot.
+*   `<C-q>` (inside lazygit) — hide lazygit but keep it running, so you can roam nvim and pop back.
+*   `e` (on a file/hunk) — open that file in *this* nvim at that line, keeping lazygit alive.
+*   `q` (inside lazygit) — quit lazygit.
+
+The lazygit config is versioned in this repo at `lazygit/config.yml` (dimmed selection highlight + the nvim edit-integration). It is loaded automatically via lazygit's `--use-config-file`, so no manual copy is needed — cloning this repo to `~/.config/nvim` is enough. The `e` integration is backed by `scripts/lazygit-edit.sh`.
+
+> To make lazygit launched from a plain terminal use the same config, symlink it:
+> ```sh
+> ln -sf ~/.config/nvim/lazygit/config.yml ~/.config/lazygit/config.yml
+> ```
 
 
 ### Install Kickstart

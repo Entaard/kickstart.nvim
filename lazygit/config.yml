@@ -1,0 +1,30 @@
+# Lazygit configuration, versioned with this nvim config.
+#
+# It is loaded automatically when lazygit is launched from nvim (<leader>lg)
+# via `--use-config-file` (see lua/xubi/plugins/lazygit.lua), so cloning this
+# repo to ~/.config/nvim is enough -- no manual copy needed.
+#
+# To use it for lazygit launched from a plain terminal too, symlink it:
+#   ln -sf ~/.config/nvim/lazygit/config.yml ~/.config/lazygit/config.yml
+gui:
+  theme:
+    # Dim, neutral highlight for the currently selected line
+    # (default was a bright [blue] background).
+    selectedLineBgColor:
+      - "#45475a"
+    selectedRangeBgColor:
+      - "#45475a"
+os:
+  # Running lazygit from inside nvim: `e` on a file/hunk opens it in the parent
+  # nvim at that line AND hides lazygit (keeps it running), so <leader>lg pops
+  # back to the exact same hunk. See ~/.config/nvim/scripts/lazygit-edit.sh.
+  #
+  # To revert to the simpler "jump to file, quit lazygit" behavior, delete the
+  # two lines below and uncomment:
+  #   editPreset: nvim-remote
+  edit: '"$HOME/.config/nvim/scripts/lazygit-edit.sh" "{{filename}}"'
+  editAtLine: '"$HOME/.config/nvim/scripts/lazygit-edit.sh" "{{filename}}" "{{line}}"'
+  # The script hands off to nvim over RPC and returns immediately -- nothing
+  # runs *in* the terminal -- so don't suspend lazygit or show the
+  # "Press enter to return to lazygit" prompt (treat it like a GUI editor).
+  editInTerminal: false

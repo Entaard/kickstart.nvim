@@ -12,10 +12,31 @@ return {
       mode = 'v',
       desc = 'Format selected block',
     },
+    {
+      '<leader>f',
+      function()
+        require('conform').format { async = true, lsp_format = 'fallback' }
+      end,
+      mode = 'n',
+      desc = 'Format whole file',
+    },
   },
   opts = {
     notify_on_error = true,
     notify_no_formatters = true,
+    formatters = {
+      -- Standalone csharpier (mason / global dotnet tool on PATH).
+      --  --no-cache:    csharpier caches "already formatted" verdicts; a stale
+      --                 cache made `=` silently do nothing. Bypass it so
+      --                 formatting is deterministic.
+      --  --stdin-path:  let csharpier resolve the repo's .editorconfig /
+      --                 .csharpierrc for this file (config controls line wrap).
+      csharpier = {
+        command = 'csharpier',
+        args = { 'format', '--no-cache', '--stdin-path', '$FILENAME' },
+        stdin = true,
+      },
+    },
     format_on_save = function(bufnr)
       -- For more examples, see https://github.com/stevearc/conform.nvim/blob/master/doc/recipes.md#autoformat-with-extra-features
       -- Disable with a global or buffer-local variable
@@ -50,7 +71,7 @@ return {
       json = { 'prettier' },
       yaml = { 'prettier' },
       markdown = { 'prettier' },
-      csharp = { 'csharpier' },
+      cs = { 'csharpier' }, -- nvim's filetype for .cs is `cs`, not `csharp`
       go = { 'gofmt' },
       gdscript = { 'gdformat' },
       -- Conform can also run multiple formatters sequentially

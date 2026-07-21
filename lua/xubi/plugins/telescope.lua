@@ -50,6 +50,15 @@ return {
       --  All the info you're looking for is in `:help telescope.setup()`
       --
       defaults = {
+        -- Telescope's treesitter preview calls `vim.treesitter.start` on
+        -- preview buffers that are recycled/wiped on every keystroke. With
+        -- nvim-treesitter's `main`-branch parsers on Neovim 0.12 this path
+        -- segfaults (hard crash while typing in find_files). Use the regex
+        -- highlighter for previews instead — visually near-identical, no
+        -- native parser churn. Editing real files still uses treesitter.
+        preview = {
+          treesitter = false,
+        },
         mappings = {
           i = {
             -- ['<c-enter>'] = 'to_fuzzy_refine',
